@@ -18,6 +18,11 @@ class TestParser(unittest.TestCase):
       on_"!#e
       """)
 
+  def test_underscore_action(self):
+    node = Parser.parse("one_action")[0]
+    assert node.type == NodeType.ACTION_CONDITION
+    assert len(node.children) == 0
+
   def test_parse_two_actions(self):
     roots = Parser.parse("""
       one
@@ -180,6 +185,19 @@ class TestParser(unittest.TestCase):
       <
     """)[0]
     assert(root.type == NodeType.SEQUENCE)
+
+  def test_parse_with_subfile(self):
+    root = Parser.parse("""
+      >
+        first
+        :pybt/tests/test.bt
+      <
+      """)[0]
+    assert root.type == NodeType.SEQUENCE
+    assert len(root.children) == 2
+    test_bt = root.children[1]
+    assert len(test_bt.children) == 4
+    assert test_bt.type == NodeType.SEQUENCE
 
 if __name__ == "__main__":
   unittest.main()

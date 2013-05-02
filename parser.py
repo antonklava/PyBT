@@ -1,4 +1,5 @@
 import re
+import os
 from .node import Node, NodeType
 
 class Parser:
@@ -10,6 +11,7 @@ class Parser:
   // ... \\ - Parallel node
   /n/ .. \\ - Parallel node
   # ...     - Comment
+  :...      - File (subtree)
   ...       - Action
   """
   @staticmethod
@@ -17,7 +19,7 @@ class Parser:
     nodes = []
     while behavior_tree!="":
       #print "\n\n\033[33mparsing:\033[00m\n", behavior_tree
-      behavior_tree = behavior_tree.strip('\n ')
+      behavior_tree = behavior_tree.strip('\n\t ')
       # raw_input("")
 
       if behavior_tree.startswith("?"):
@@ -32,6 +34,9 @@ class Parser:
       elif behavior_tree.startswith("#"): # comment
         node, behavior_tree = Parser.comment(behavior_tree)
 
+      elif behavior_tree.startswith(":"):
+        node, behavior_tree = Parser.file(behavior_tree)
+
       else: # action
         node, behavior_tree = Parser.action(behavior_tree)
 
@@ -41,13 +46,25 @@ class Parser:
     return nodes
 
   @staticmethod
+  def file(behavior_tree):
+    end = behavior_tree.find("\n")
+    if end is -1:
+      end = len(behavior_tree)
+    filename = behavior_tree[1:end]
+    if not os.path.exists(filename):
+      raise IOError("Subtree with filename "+os.getcwd()+os.sep+filename+" was not found.")
+    with open(filename, 'r') as f:
+      node = Parser.parse(f.read())[0]
+    return node, behavior_tree[end:]
+
+  @staticmethod
   def action(behavior_tree):
     end = behavior_tree.find("\n")
     if end is -1:
       end = len(behavior_tree)
     action = behavior_tree[:end]
-    #print "found action/condition:", action
-    if not action.isalnum():
+    # print "found action/condition:", action
+    if not re.match(r"\A[a-zA-Z0-9-_]+$", action):
       raise SyntaxWarning("Action found is not alphanumeric.\n"+action)
     node = Node(
       NodeType.ACTION_CONDITION,
