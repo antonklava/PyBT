@@ -4,11 +4,11 @@ A lightweight [behavior tree](http://www.altdevblogaday.com/2011/02/24/introduct
 ## How to use it
 Clone this repo and make sure the pybt package folder is in your PYTHONPATH environment variable. Try with `import pybt` to make sure it can be found.
 
-*BehaviorTree class* - is the implementation of the actual behavior tree. Here the nodes
+- *BehaviorTree class* - is the implementation of the actual behavior tree. Here the nodes
 are traversed and the actions/conditions called.
-*Actor class* - A class that should be extended to run the actions and conditions of the behavior tree.
-*Status class* - More of an enum really (Status.SUCCESS, Status.RUNNING, Status.FAIL). Have to be returned by every action/condition in the actor class.
-*BehaviorTree tick* - The behavior tree has to be 'ticked' to call actions/conditions. This may be done for example once every update loop.
+- *Actor class* - A class that should be extended to run the actions and conditions of the behavior tree.
+- *Status class* - More of an enum really (Status.SUCCESS, Status.RUNNING, Status.FAIL). Have to be returned by every action/condition in the actor class.
+- *BehaviorTree tick* - The behavior tree has to be 'ticked' to call actions/conditions. This may be done for example once every update loop.
 
 ## Writing behavior trees
 Behavior trees can be supplied by passing a string or a filename when creating the BehaviorTree class.
@@ -118,9 +118,3 @@ Write some code with test and make a pull request! Any additions are welcome!
 ## TODO
 - Graphical representation of the tree
 - Behavior tree runner (no need to provide custom loop)
-
-## Contact
-Anton Klava
-antonklava@gmail.com
-http://klava.se/
-
