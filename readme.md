@@ -47,6 +47,7 @@ The parallel selector starts with a `//` or `/n/` and ends with `\\`. The number
 Lines starting with `#` will be ignored.
 
     # This is a comment
+    action # You can comment on the same line as well
 
 ### Importing subtrees/files
 Importing other trees from files is also supported. File imports should be done on a new line and with the file path starting with `:`
@@ -54,7 +55,7 @@ Importing other trees from files is also supported. File imports should be done 
     :my_behavior_trees/behavior_tree.bt
 
 ## Example
-This simple example first defines an actor class MyActor with some actions and conditions. Then a behavior tree is created. The root node in the tree is a priority node, which will stop only when an action/condition/node has succeeded. It first checks if too much time as passed, wich in the first 3 seconds has not and therefore returns Status.FAIL. The priority node tries the sequence node. The sequence node will return success if all actions/conditions/nodes in it returns success. This will not happen until enough_time_has_passed returns true - after 1.5 seconds. After this time the condition returns true and my_action is called printing "My Action was called!" until too_much_time_has_passed starts returning success - after another 1.5 seconds.
+This simple example first defines an actor class MyActor with some actions and conditions. Then a behavior tree is created. The root node in the tree is a priority node, which will stop only when an action/condition/node has succeeded. It first checks if too much time as passed, which in the first 3 seconds has not and therefore returns Status.FAIL. The priority node tries the sequence node. The sequence node will return success if all actions/conditions/nodes in it returns success. This will not happen until enough_time_has_passed returns true - after 1.5 seconds. After this time the condition returns true and my_action is called printing "My Action was called!" until too_much_time_has_passed starts returning success - after another 1.5 seconds.
 
 ```python
 from pybt.behavior_tree import BehaviorTree, Status

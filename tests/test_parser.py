@@ -2,6 +2,7 @@ import unittest
 from ..parser import Parser
 from ..node import NodeType
 
+
 class TestParser(unittest.TestCase):
   def setUp(self):
     pass
@@ -158,6 +159,22 @@ class TestParser(unittest.TestCase):
     assert len(roots[1].children) == 2
     assert roots[0].parallelSuccessCount == 1
     assert roots[1].parallelSuccessCount == 2
+
+  def test_simple_comment(self):
+    root = Parser.parse("""
+      # comment
+      action
+    """)[0]
+    assert root.type == NodeType.ACTION_CONDITION
+    assert len(root.children) == 0
+
+  def test_simple_same_line_comment(self):
+    roots = Parser.parse("""
+      action # comment same line
+      action_below
+    """)
+    assert roots[0].type == NodeType.ACTION_CONDITION
+    assert len(roots[0].children) == 0
 
   def test_parse_full(self):
     root = Parser.parse("""

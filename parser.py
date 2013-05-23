@@ -2,6 +2,7 @@ import re
 import os
 from .node import Node, NodeType
 
+
 class Parser:
   """
   Parses a behavior tree.
@@ -59,19 +60,15 @@ class Parser:
 
   @staticmethod
   def action(behavior_tree):
-    end = behavior_tree.find("\n")
-    if end is -1:
-      end = len(behavior_tree)
-    action = behavior_tree[:end]
-    # print "found action/condition:", action
-    if not re.match(r"\A[a-zA-Z0-9-_]+$", action):
-      raise SyntaxWarning("Action found is not alphanumeric.\n"+action)
+    match = re.match(r"\A([a-zA-Z0-9-_]+)", behavior_tree)
+    if match is None:
+      raise SyntaxWarning("Action could not be found.\n\""+behavior_tree+"\"")
+    action = match.group(0)
     node = Node(
       NodeType.ACTION_CONDITION,
-      action = action
+      action=action
     )
-    #print "remaining:", behavior_tree[end:]
-    return node, behavior_tree[end:]
+    return node, behavior_tree[len(action):]
 
   @staticmethod
   def comment(behavior_tree):
